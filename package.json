@@ -1,0 +1,47 @@
+{
+  "name": "panda-cli",
+  "version": "0.1.0",
+  "description": "Panda CLI Utility",
+  "main": "panda.js",
+  "scripts": {
+    "panda": "panda",
+    "test": "jest",
+    "lint": "standard",
+    "lint-fix": "standard --fix"
+  },
+  "bin": {
+    "panda": "./bin/panda.js"
+  },
+  "author": "Adam Puzio <adam@puzio.me>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AdamPuzio/panda.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AdamPuzio/panda/issues"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/AdamPuzio/panda",
+  "engines": {
+    "node": ">= 14.x.x"
+  },
+  "panda": {},
+  "standard": {
+    "ignore": [
+      "scaffold/*",
+      "test/*"
+    ]
+  },
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "standard": "^17.0.0"
+  },
+  "dependencies": {
+    "cli-highlight": "^2.1.11",
+    "fs-extra": "^10.1.0",
+    "glob": "^8.0.3",
+    "lodash": "^4.17.21",
+    "panda": "github:AdamPuzio/panda#0.6.0"
+  }
+}
