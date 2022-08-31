@@ -9,7 +9,7 @@ module.exports = new Terminal.Command({
   command: 'ctx',
   description: 'Get information about the current context',
   options: [{
-    option: 'json',
+    name: 'json',
     alias: 'j',
     type: Boolean,
     description: 'Outputs as a JSON object instead of a readable format',
@@ -50,6 +50,7 @@ module.exports = new Terminal.Command({
     valFn('context', 0)
     const lists = {
       Location: (k) => { return k.startsWith('in') },
+      Name: (k) => { return k.endsWith('_NAME') },
       Path: (k) => { return k.endsWith('_PATH') },
       Version: (k) => { return k.endsWith('_VERSION') }
     }

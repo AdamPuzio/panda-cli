@@ -9,7 +9,7 @@ const levels = Logger.getLevels()
 module.exports = new Terminal.Command({
   command: 'project:start',
   description: 'Run all applications and services for a project',
-  help: `tips:
+  helpAdd: `tips:
     - to run in debug mode, run: ${color.green('panda project:start --debug')}
     - change log format: ${color.green('panda project:start --log-format [format]')}
     .    formats: ${color.blue(formats.join(', '))}
@@ -18,21 +18,21 @@ module.exports = new Terminal.Command({
     `,
   options: [
     {
-      option: 'apps',
+      name: 'apps',
       alias: 'a',
       description: 'a list of apps to run (not yet implemented)',
       type: String,
       multiple: true
     },
     {
-      option: 'services',
+      name: 'services',
       alias: 's',
       description: 'a list of services to run (not yet implemented)',
       type: String,
       multiple: true
     },
     {
-      option: 'no-services',
+      name: 'no-services',
       description: 'run without any services (not yet implemented)',
       type: Boolean
     }

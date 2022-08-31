@@ -15,10 +15,10 @@ module.exports = new Terminal.Command({
     this.spacer()
 
     const levels = Object.keys(this.logger.levels)
-    this.info(`Log Levels: ${levels.join(' | ')}`)
+    this.logger.out(`Log Levels: ${levels.join(' | ')}`)
     this.spacer()
     levels.forEach((k) => {
-      this[k](`log level test for: ${k}`)
+      this.logger[k](`log level test for: ${k}`)
     })
   }
 })

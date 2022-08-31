@@ -9,7 +9,7 @@ module.exports = new Terminal.Command({
   command: 'project:info',
   description: 'Get information about the current Project and how it will be run',
   options: [{
-    option: 'json',
+    name: 'json',
     alias: 'j',
     type: Boolean
   }],

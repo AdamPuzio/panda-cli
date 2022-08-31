@@ -2,7 +2,7 @@
   "name": "panda-cli",
   "version": "0.1.0",
   "description": "Panda CLI Utility",
-  "main": "panda.js",
+  "main": "./bin/panda.js",
   "scripts": {
     "panda": "panda",
     "test": "jest",
@@ -42,6 +42,10 @@
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "lodash": "^4.17.21",
-    "panda": "github:AdamPuzio/panda#0.6.0"
+    "map-stream": "^0.0.7",
+    "package-options": "^0.1.4",
+    "panda": "file:../../libs/panda",
+    "vinyl-contents": "^1.0.0",
+    "vinyl-fs": "^3.0.3"
   }
 }
