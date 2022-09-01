@@ -4,9 +4,9 @@
 * Helper functionality for Command scaffolding
 */
 
-const { ctx } = require('panda')
+const { Factory } = require('panda')
 const path = require('path')
-const packageJson = require(path.join(ctx.cwd, 'package.json'))
+const packageJson = Factory.readPackageJsonSync(null, { onFail: 'empty' })
 
 module.exports = {
   questions: {

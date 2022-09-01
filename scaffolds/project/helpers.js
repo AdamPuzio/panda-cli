@@ -58,6 +58,22 @@ module.exports = {
       }, ...cfg}
     },
 
+    // port
+    port: (port, cfg={}) => {
+      if (!port) port = 5000
+      return {...{
+        type: 'input',
+        name: 'port',
+        message: 'Port:',
+        default: port,
+        validate: async (val, answers) => {
+          const test = /^\d+$/.test(val)
+          if (test) answers.port = parseInt(val)
+          return test
+        }
+      }, ...cfg}
+    },
+
     // yes/no to add an in-project check
     confirmInProject: (cfg={}) => {
       return {...{

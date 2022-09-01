@@ -1,7 +1,9 @@
 'use strict'
 
 const { Panda, Context, Factory, Utility, ctx } = require('panda')
-const Scaffold = Panda.entity('scaffold')
+//const Scaffold = Panda.entity('scaffold')
+const Scaffold = require('../../../src/entity/scaffold')
+const localHelpers = require('../helpers')
 const path = require('path')
 const _ = require('lodash')
 
@@ -11,29 +13,73 @@ module.exports = new Scaffold({
   description: 'Basic web server',
 
   interface: [
-    {
-      type: 'input',
-      name: 'name',
-      message: 'Project Name:',
-      default: function (answers) {
-        return Utility.slugify(`new-${ctx.label || 'panda'}-project`)
-      },
-      validate: async (val, answers) => {
-        const check = val.length > 1 && /^[a-zA-Z0-9-_]+$/.test(val) && val === _.kebabCase(val)
-        return check || 'project name must be at least 2 letters and alphanumeric (plus dash & underscore, no spaces or special characters)'
-      }
-    }
+    // project name
+    localHelpers.questions.projectName(),
+    // desc
+    localHelpers.questions.desc(),
+    localHelpers.questions.port(),
+    // tools & utilities
+    localHelpers.questions.buildTool(),
+    localHelpers.questions.testTool(),
+    localHelpers.questions.cssTool(),
+    localHelpers.questions.lintTool()
   ],
 
   async build (data) {
-    console.log(`Scaffold['project'].build()`)
+    this.logger.debug(`Scaffold['project'].build()`)
     const srcDir = path.join(__dirname, 'template')
-    const destDir = path.join(ctx.cwd, data.name)
-    //this.confirmNotExists(destDir)
+    const destDir = data.name
+    this.confirmNotExists(destDir)
 
-    const copy = this.copy(srcDir, destDir, data, {})
-    //copy.add()
-    return await copy
-    //const build = scaffe.generate(templateDir, outDir, { overwrite: true, variables: { name: "app" } })
+    const cfg = {}
+    await this.copyScaffold(srcDir, destDir, data, cfg)
+    let pjson = await Factory.buildPackageJson({
+      name: data.name,
+      description: data.desc,
+      main: `index.js`
+    })
+    pjson = await Factory.applyTools(pjson, Utility.pick(data, ['testTool', 'lintTool', 'cssTool', 'buildTool']))
+    await Factory.writePackageJson(pjson, destDir)
+    await Factory.npmInstall([], { baseDir: destDir })
+    const prjson = {
+      apps: [
+        { app: 'web', port: data.port }
+      ],
+      components: [
+        {
+          app: 'web',
+          path: '{PROJECT_PATH}/app/ui/components'
+        }
+      ],
+      packages: [],
+      routes: [
+        {
+          app: 'web',
+          path: '{PROJECT_PATH}/app/routes'
+        }
+      ],
+      services: [
+        {
+          app: 'web',
+          path: '{PROJECT_PATH}/app/services'
+        }
+      ],
+      statics: [
+        {
+          app: 'web',
+          path: '{PROJECT_PATH}/app/static'
+        }
+      ],
+      views: [
+        {
+          app: 'web',
+          path: '{PROJECT_PATH}/app/ui/views'
+        }
+      ]
+    }
+    await Factory.writeProjectJson(prjson, destDir)
+    this.logger.info(`Options to run your application:`)
+    this.logger.info(`  1. run 'node index' to run it directly`)
+    this.logger.info(`  2. run 'panda project:start' to run the development server`)
   }
 })

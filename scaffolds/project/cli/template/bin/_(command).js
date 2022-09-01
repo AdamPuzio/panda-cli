@@ -24,34 +24,34 @@ Terminal.cmd({
   ],
   options: [
     {
-      option: 'help',
+      name: 'help',
       alias: 'h',
       type: Boolean,
       description: 'Display help',
       group: 'global'
     },
     {
-      option: 'version',
+      name: 'version',
       alias: 'v',
       type: Boolean,
       description: 'Output the version number',
       group:'global'
     },
     {
-      option: 'debug',
+      name: 'debug',
       alias: 'd',
       type: Boolean,
       description: 'Run in debug mode (add library name to debug for just that lib)',
       group: 'global'
     },
     {
-      option: 'log-level',
+      name: 'log-level',
       type: String,
       description: 'Set the log level',
       group: 'logging'
     },
     {
-      option: 'log-format',
+      name: 'log-format',
       type: String,
       description: 'Set the logging output format',
       group: 'logging'
