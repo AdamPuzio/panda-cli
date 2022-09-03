@@ -3,6 +3,8 @@
 const { Factory, Logger, Terminal } = require('panda')
 const packageJson = require('../package.json')
 const path = require('path')
+const childProcess = require('child_process')
+const boxen = require('boxen')
 
 const color = Terminal.color
 const formats = Logger.getFormats()
@@ -15,6 +17,18 @@ Terminal.clear()
 
 // make sure the current version of Node is valid
 Terminal.versionCheck()
+
+// Check if update is available
+// ToDo: add internal command to update
+const latest = childProcess.execSync(`npm show ${packageJson.name} version`, {}).toString().trim()
+if (packageJson.version !== latest) {
+  const cmd = `npm update -g ${packageJson.name}`
+  const msg = color.blue(`
+  An update is available (${latest})
+  To upgrade, run: ${color.green(cmd)}
+  `)
+  console.log(boxen(msg, {padding: 2, margin: 1, borderStyle: 'double', textAlignment: 'left'}))
+}
 
 Terminal.cmd({
   command: 'panda',
