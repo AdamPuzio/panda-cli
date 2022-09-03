@@ -1,8 +1,8 @@
 {
-  "name": "panda-cli",
+  "name": "get-panda",
   "version": "0.1.0",
   "description": "Panda CLI Utility",
-  "main": "./bin/panda.js",
+  "main": "panda-cli.js",
   "scripts": {
     "panda": "panda",
     "test": "jest",
@@ -16,13 +16,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AdamPuzio/panda.git"
+    "url": "https://github.com/AdamPuzio/panda-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/AdamPuzio/panda/issues"
+    "url": "https://github.com/AdamPuzio/panda-cli/issues"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/AdamPuzio/panda",
+  "homepage": "https://adampuzio.github.io/panda-docs/",
   "engines": {
     "node": ">= 14.x.x"
   },
