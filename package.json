@@ -1,6 +1,6 @@
 {
   "name": "get-panda",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Panda CLI Utility",
   "main": "panda-cli.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "lodash": "^4.17.21",
     "map-stream": "^0.0.7",
     "package-options": "^0.1.4",
-    "panda": "^0.6.1",
+    "panda": "^0.6.2",
     "vinyl-contents": "^1.0.0",
     "vinyl-fs": "^3.0.3"
   }
