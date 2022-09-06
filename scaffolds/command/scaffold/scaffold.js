@@ -1,29 +1,39 @@
 'use strict'
 
-//const { Panda, Context, Factory, Utility, ctx } = require('panda')
+const { Factory } = require('panda')
 const Scaffold = require('../../../src/entity/scaffold')
-//const helpers = Scaffold.helpers
-const localHelpers = require('../helpers')
+const helpers = Scaffold.helpers
 const path = require('path')
 
-const data = {}
-
 module.exports = new Scaffold({
-  //namespace: 'panda.scaffold.command.scaffold',
+  namespace: 'panda.scaffolds.command.scaffold',
   name: 'Scaffold',
   description: 'Command used to build something from a Scaffold',
 
   interface: [
     // parent command
-    localHelpers.questions.parentCommand(),
+    helpers.questions.parentCommand(),
     // command
-    localHelpers.questions.command(),
+    helpers.questions.command(),
     // desc
-    localHelpers.questions.desc(),
+    helpers.questions.desc(),
     // filepath
-    localHelpers.questions.filepath(),
+    helpers.questions.filepath({
+      default: function (answers) {
+        const packageJson = Factory.readPackageJsonSync(null, { onFail: 'empty' })
+        const binDir = path.dirname(packageJson.bin[answers.parentCommand])
+        const baseName = answers.command.replace(':', path.sep)
+        const filename = `${answers.parentCommand}-${baseName}.js`
+        return path.join(binDir, filename)
+      }
+    }),
     // entity type
-    {
+    helpers.questions.entity({
+      default: function (answers) {
+        return answers.command.split(':')[0]
+      }
+    }),
+    /*{
       type: 'string',
       name: 'entity',
       message: 'Entity Type:',
@@ -31,9 +41,9 @@ module.exports = new Scaffold({
       default: function (answers) {
         return answers.command.split(':')[0]
       }
-    },
+    },*/
     // add in-project check
-    localHelpers.questions.confirmInProject()
+    helpers.questions.confirmInProject()
   ],
 
   async build (data) {

@@ -2,7 +2,7 @@
 
 const { Panda, Context, Factory, Utility, ctx } = require('panda')
 const Scaffold = require('../../../src/entity/scaffold')
-const localHelpers = require('../helpers')
+const helpers = Scaffold.helpers
 const path = require('path')
 const _ = require('lodash')
 
@@ -13,14 +13,19 @@ module.exports = new Scaffold({
 
   interface: [
     // project name
-    localHelpers.questions.projectName(),
+    helpers.questions.name({
+      message: 'Project Name:',
+      default: function (answers) {
+        return Utility.slugify(`new-${ctx.label || 'panda'}-project`)
+      }
+    }),
     // desc
-    localHelpers.questions.desc(),
+    helpers.questions.desc(),
     // command
-    localHelpers.questions.command(),
+    helpers.questions.command(),
     // tools & utilities
-    localHelpers.questions.testTool(),
-    localHelpers.questions.lintTool()
+    helpers.questions.testTool(),
+    helpers.questions.lintTool()
   ],
 
   async build (data) {

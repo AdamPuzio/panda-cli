@@ -1,30 +1,34 @@
 'use strict'
 
-//const { Panda, Context, Factory, Utility, ctx } = require('panda')
-//const Scaffold = Panda.entity('scaffold')
+const { Factory } = require('panda')
 const Scaffold = require('../../../src/entity/scaffold')
-//const helpers = Scaffold.helpers
-const localHelpers = require('../helpers')
+const helpers = Scaffold.helpers
 const path = require('path')
 
-const data = {}
-
 module.exports = new Scaffold({
-  //namespace: 'panda.scaffold.command.basic',
+  namespace: 'panda.scaffolds.command.basic',
   name: 'Basic',
   description: 'Simple CLI Command',
 
   interface: [
     // parent command
-    localHelpers.questions.parentCommand(),
+    helpers.questions.parentCommand(),
     // command
-    localHelpers.questions.command(),
+    helpers.questions.command(),
     // desc
-    localHelpers.questions.desc(),
+    helpers.questions.desc(),
     // filepath
-    localHelpers.questions.filepath(),
+    helpers.questions.filepath({
+      default: function (answers) {
+        const packageJson = Factory.readPackageJsonSync(null, { onFail: 'empty' })
+        const binDir = path.dirname(packageJson.bin[answers.parentCommand])
+        const baseName = answers.command
+        const filename = `${answers.parentCommand}-${baseName}.js`
+        return path.join(binDir, filename)
+      }
+    }),
     // add in-project check
-    localHelpers.questions.confirmInProject()
+    helpers.questions.confirmInProject()
   ],
 
   async build (data) {

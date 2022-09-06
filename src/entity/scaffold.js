@@ -1,15 +1,54 @@
 'use strict'
 
-const { Panda, Context, Factory, Utility, ctx } = require('panda')
-const PandaScaffold = Panda.entity('scaffold')
+const { Panda, Context, Factory, Scaffold, Utility, ctx } = require('panda')
 const path = require('path')
 const map = require('map-stream')
 const vfs = require('vinyl-fs')
 const vinylContents = require('vinyl-contents')
-const helpers = require('../../scaffolds/common/helpers')
 
-class Scaffold extends PandaScaffold {
-  helpers = helpers
+class DevScaffold extends Scaffold {
+
+  async copyScaffoldFile (source, dest, data, opts) {
+    opts = {
+      ...{
+        destBase: ctx.cwd,
+        overwrite: false
+      },
+      ...opts
+    }
+    const $this = this
+
+    const destPath = path.join(opts.destBase, dest)
+
+    if (opts.overwrite === false) await this.confirmNotExists(destPath, `Output location already exists, can't overwrite (${destPath})`)
+
+    const vals = {
+      ...ctx,
+      ...data,
+      data,
+      Utility,
+      _: Utility._
+    }
+
+    return new Promise(function(resolve, reject) {
+      vfs.src(source)
+        .pipe(map((file, cb) => {
+          file.basename = path.basename(dest)
+
+          vinylContents(file, async function(err, contents) {
+            if (err) return cb(err)
+            if (!contents) return cb()
+      
+            const output = await $this._template(contents.toString(), vals)
+            file.contents = Buffer.from(output)
+            cb(null, file)
+          })
+        }))
+        .pipe(vfs.dest(path.dirname(destPath)))
+        .on('end', resolve)
+        .on('error', reject)
+    })
+  }
 
   async copyScaffold (source, dest, data, opts) {
     opts = {
@@ -76,7 +115,7 @@ class Scaffold extends PandaScaffold {
   }
 }
 
-module.exports = Scaffold
+module.exports = DevScaffold
 
 
 

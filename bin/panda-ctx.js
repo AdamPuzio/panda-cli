@@ -13,7 +13,7 @@ module.exports = new Terminal.Command({
     alias: 'j',
     type: Boolean,
     description: 'Outputs as a JSON object instead of a readable format',
-    group: 'huh'
+    group: 'format'
   }],
   action: async function (opts) {
     const ctx = Context.ctx
